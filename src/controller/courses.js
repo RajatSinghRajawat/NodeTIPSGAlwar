@@ -1,9 +1,5 @@
 const { course } = require("../models/courses");
 
-
-
-
-
 const courseAdd = async (req, res) => {
 
     const { courseName } = req.body;
