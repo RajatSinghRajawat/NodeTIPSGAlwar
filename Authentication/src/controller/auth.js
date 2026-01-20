@@ -1,8 +1,9 @@
 const { Auth } = require("../models/auth");
+const bcrypt = require('bcrypt');
 
 const jwt = require("jsonwebtoken")
 
-
+const saltround = 10;
 
 
 
@@ -15,16 +16,20 @@ const register = async (req, res) => {
             res.status(404).json({ message: "fields are required" })
         }
 
-
+        const hashedpassword = await bcrypt.hash(password, saltround)
         const auth = await Auth.create({
-            name, email, password
+            name, email, password: hashedpassword
         })
 
         if (!auth) {
             res.status(404).json({ message: "user not created" })
         }
 
-        const token = jwt.sign({ id: auth._id }, "secret_key", { expiresIn: "1d" })
+        const paylod = {
+            id: auth._id,
+            email: auth.email
+        }
+        const token = jwt.sign(paylod, "secret_key", { expiresIn: "1d" })
 
         res.status(200).json({
             message: "user created successfully",
@@ -47,7 +52,12 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body
 
-        const auth = await Auth.findOne({ email, password });
+
+        const auth = await Auth.findOne({ email });
+        const isPasswordValid = await bcrypt.compare(password, auth.password)
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: "Invalid password" })
+        }
         const token = jwt.sign({ id: auth._id }, "secret_key", { expiresIn: "1d" })
 
 
@@ -71,9 +81,15 @@ const logout = async (req, res) => {
 }
 
 
-const getProfile = async (req,res)=>{
-    const user = await Auth.find();
-    res.send({user})
+const getProfile = async (req, res) => {
+    try {
+        const auth = await Auth.findById(req.auth.id)
+        console.log(auth, 'jkj');
+
+        res.status(200).json({ message: "user profile", auth })
+    } catch (error) {
+        console.log(error);
+    }
 }
 
-module.exports = { register, login, logout }
+module.exports = { register, login, logout, getProfile }
