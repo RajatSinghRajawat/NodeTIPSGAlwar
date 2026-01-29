@@ -4,10 +4,6 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken")
 
 const saltround = 10;
-
-
-
-
 const register = async (req, res) => {
 
     try {
@@ -16,7 +12,7 @@ const register = async (req, res) => {
             res.status(404).json({ message: "fields are required" })
         }
 
-        const hashedpassword = await bcrypt.hash(password, saltround)
+        const hashedpassword = await bcrypt.hash(password, 15)
         const auth = await Auth.create({
             name, email, password: hashedpassword
         })
@@ -46,8 +42,6 @@ const register = async (req, res) => {
     }
 
 }
-
-
 const login = async (req, res) => {
     try {
         const { email, password } = req.body
@@ -68,8 +62,6 @@ const login = async (req, res) => {
 
     }
 }
-
-
 const logout = async (req, res) => {
     try {
         const auth = await Auth.findOneAndUpdate({ token: null })
@@ -79,8 +71,6 @@ const logout = async (req, res) => {
 
     }
 }
-
-
 const getProfile = async (req, res) => {
     try {
         const auth = await Auth.findById(req.auth.id)
@@ -91,5 +81,4 @@ const getProfile = async (req, res) => {
         console.log(error);
     }
 }
-
 module.exports = { register, login, logout, getProfile }
