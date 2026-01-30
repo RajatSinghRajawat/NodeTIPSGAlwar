@@ -23,7 +23,6 @@ const register = async (req, res) => {
 
         const paylod = {
             id: auth._id,
-            email: auth.email
         }
         const token = jwt.sign(paylod, "secret_key", { expiresIn: "1d" })
 

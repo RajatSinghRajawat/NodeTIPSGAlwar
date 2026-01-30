@@ -1,6 +1,6 @@
 const express = require("express")
 const { register , login , logout , getProfile} = require("../controller/auth")
-const verifyToken = require("../middleware/auth")
+const {verification} = require("../middleware/auth")
 
 const router = express.Router()
 
@@ -9,7 +9,7 @@ const router = express.Router()
 router.post("/register", register)
 router.post("/login" , login)
 router.post("/logout" , logout)
-router.get("/profile" , verifyToken ,  getProfile)
+router.get("/profile"  ,verification ,   getProfile)
 
 
 
