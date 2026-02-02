@@ -37,13 +37,29 @@ const getOne = async (req, res) => {
 }
 
 const searchProducts = async (req, res) => {
-    try {
-        const {query} = req.query;
-        const results  = await product.find({ name: { $regex: query, $options: 'i' } });
-        res.status(200).json({ message: "Search results", results })
-    } catch (error) {
-        
+  try {
+    const { name } = req.query;
+
+    if (!name) {
+      return res.status(400).json({ message: "Search name is required" });
     }
-}
+
+    const results = await product.find({
+      name: { $regex: name, $options: "i" }
+    });
+
+    res.status(200).json({
+      message: "Search results",
+      results
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching product",
+      error: error.message
+    });
+  }
+};
+
 
 module.exports = { addPrdoucts, getproducts, getOne , searchProducts}
