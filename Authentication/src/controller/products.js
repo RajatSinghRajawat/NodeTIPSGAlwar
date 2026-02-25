@@ -14,23 +14,50 @@ const addPrdoucts = async (req, res) => {
   }
 }
 
+// const getproducts = async (req, res) => {
+//   try {
+//     const page = parseInt(req.query.page) || 1
+//     const limit = parseInt(req.query.limit) || 5
+//     const skip = (page - 1) * limit
+
+//     const total = await product.countDocuments()
+
+//     const products = await product.find({})
+//       .skip(skip)
+//       .limit(limit)
+
+//     res.status(200).json({
+//       success: true,
+//       page,
+//       limit,
+//       total,
+//       totalPages: Math.ceil(total / limit),
+//       data: products
+//     })
+//   } catch (error) {
+//     console.log(error);
+
+
+//   }
+// }
+
 const getproducts = async (req, res) => {
+
   try {
-
     const get = await product.find({})
-
-    res.status(200).json({ message: "product addded successfully", get })
+    res.status(200).json({ message: "user find sucessfully" ,   get})
   } catch (error) {
     console.log(error);
 
   }
+
 }
 
 
-const searchProducts = async (req , res) => {
+
+
+const searchProducts = async (req, res) => {
   const name = req.query.name
-
-
   const search = await product.find({ name: { $regex: name, $options: "i" } })
   res.status(200).json({ message: "product search successfully", search })
 

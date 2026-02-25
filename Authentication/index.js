@@ -3,11 +3,13 @@ const { connection } = require("./src/config/db");
 const  authRoutes  = require("./src/routes/routes");
 const myproductsRoutes = require("./src/routes/products");
 
+const cors = require("cors")
 
 
 
 const app = express()
-
+app.use(cors())
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 
