@@ -6,7 +6,6 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const Products = () => {
   const [query, setQuery] = useState('');
-
   const [products, setProducts] = useState([]);
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
