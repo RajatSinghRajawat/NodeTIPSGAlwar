@@ -2,10 +2,12 @@ const { Auth } = require("../models/auth")
 const product = require("../models/products")
 
 const addPrdoucts = async (req, res) => {
+
   try {
-    const { name, price, description, inStock } = req.body
+    const { name, price, description, inStock ,courseId } = req.body
+
     const add = await product.create({
-      name, price, description, inStock
+      name, price, description, inStock ,courseId
     })
     res.status(200).json({ message: "product addded successfully", add })
   } catch (error) {
@@ -44,11 +46,15 @@ const addPrdoucts = async (req, res) => {
 const getproducts = async (req, res) => {
 
   try {
-    const get = await product.find({})
-    res.status(200).json({ message: "user find sucessfully" ,   get})
+    const get = await product.find({}).populate("courseId");
+
+    res.status(200).json({
+      message: "user find sucessfully",
+      get
+    })
+
   } catch (error) {
     console.log(error);
-
   }
 
 }

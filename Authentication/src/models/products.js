@@ -4,6 +4,11 @@ const mongoose = require("mongoose");
 
 
 const productSchema = new mongoose.Schema({
+    courseId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "course",
+        required: true,
+    },
     name: {
         type: String,
         required: true,

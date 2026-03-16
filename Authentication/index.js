@@ -2,6 +2,7 @@ const express = require("express")
 const { connection } = require("./src/config/db");
 const  authRoutes  = require("./src/routes/routes");
 const myproductsRoutes = require("./src/routes/products");
+const coursesRoutes = require("./src/routes/courses");
 
 const cors = require("cors")
 
@@ -17,6 +18,7 @@ connection();
 
 app.use("/auth" , authRoutes)
 app.use("/products" , myproductsRoutes)
+app.use("/courses" , coursesRoutes)
 
 
 

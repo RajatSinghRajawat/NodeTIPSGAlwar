@@ -12,20 +12,50 @@ const Products = () => {
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [show, setShow] = useState(false);
+  const [courseId, setCourseId] = useState('');
+  const [courses, setCourses] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const getcourse = async () => {
+    try {
+
+      fetch("http://localhost:3001/courses/get")
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          setCourses(result);
+        })
+        .catch((error) => console.error(error));
+    } catch (error) {
+      console.log(error
+
+      );
+
+    }
+  }
+  console.log(courses, "jjjj");
+
+
+
 
   const addProduct = async () => {
     try {
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
+
       const raw = JSON.stringify({
         name: name,
         price: price,
-        description: description
+        description: description,
+        courseid: courseId
       });
+      if (!courseId) {
+        toast.error("Please select course");
+        return;
+      }
 
       const requestOptions = {
         method: "POST",
@@ -54,6 +84,7 @@ const Products = () => {
       console.error("Error adding product:", error);
     }
   };
+
 
 
 
@@ -94,7 +125,11 @@ const Products = () => {
   }
 
   useEffect(() => {
+    getcourse();
+  }, [])
+  useEffect(() => {
     getProducts();
+
 
 
   }, []);
@@ -147,6 +182,7 @@ const Products = () => {
                   <Card.Title>{item.name}</Card.Title>
                   <Card.Text>{item.description}</Card.Text>
                   <span>{item.price}</span>
+                  
                 </Card.Body>
               </Card>
             </Col>
@@ -171,6 +207,22 @@ const Products = () => {
                 type="text"
                 placeholder="Enter name"
               />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Select Course</Form.Label>
+              <Form.Select
+                value={courseId}
+                onChange={(e) => setCourseId(e.target.value)}
+              >
+                <option value="">Select Course</option>
+
+                {courses.map((item) => (
+                  <option key={item._id} value={item._id}>
+                    {item.name} {item._id}
+                  </option>
+                ))}
+
+              </Form.Select>
             </Form.Group>
 
             {/* Price */}
