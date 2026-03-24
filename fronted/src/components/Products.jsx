@@ -13,6 +13,7 @@ const Products = () => {
   const [show, setShow] = useState(false);
   const [courseId, setCourseId] = useState('');
   const [courses, setCourses] = useState([]);
+  const [file, setFile] = useState();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -36,7 +37,11 @@ const Products = () => {
   }
   console.log(courses, "jjjj");
 
+console.log(file,"slkjdbask");
 
+  const handleChange = (e) => {
+    setFile(e.target.files[0]);
+  };
 
 
   const addProduct = async () => {
@@ -45,21 +50,16 @@ const Products = () => {
       myHeaders.append("Content-Type", "application/json");
 
 
-      const raw = JSON.stringify({
-        name: name,
-        price: price,
-        description: description,
-        courseid: courseId
-      });
-      if (!courseId) {
-        toast.error("Please select course");
-        return;
-      }
+      const formdata = new FormData();
+      formdata.append("name", name);
+      formdata.append("price", price);
+      formdata.append("description", description);
+      formdata.append("courseId", courseId);
+      formdata.append("file", file);
 
       const requestOptions = {
         method: "POST",
-        headers: myHeaders,
-        body: raw,
+        body: formdata,
         redirect: "follow"
       };
 
@@ -73,6 +73,7 @@ const Products = () => {
       setName('');
       setPrice('');
       setDescription('');
+      setFile();
 
       toast.success("Product added successfully!");
       // Optional: refresh product list after adding
@@ -178,10 +179,11 @@ const Products = () => {
             <Col key={item._id}>
               <Card className="h-100 shadow-sm border-0">
                 <Card.Body>
+                  <img width={"100%"} src={`http://localhost:3001/${item.image}`} alt="hello" />
                   <Card.Title>{item.name}</Card.Title>
                   <Card.Text>{item.description}</Card.Text>
                   <span>{item.price}</span>
-                  
+
                 </Card.Body>
               </Card>
             </Col>
@@ -197,8 +199,16 @@ const Products = () => {
         </Modal.Header>
         <Modal.Body>
           <Form>
+
+
             {/* Name */}
             <Form.Group className="mb-3">
+
+              <div>
+
+                <input type="file"  onChange={handleChange}/>
+              </div>
+
               <Form.Label>Name</Form.Label>
               <Form.Control
                 value={name}

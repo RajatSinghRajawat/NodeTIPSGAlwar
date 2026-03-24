@@ -22,7 +22,7 @@ app.use("/courses" , coursesRoutes)
 
 
 
-
+app.use(express.static("public/Uploads"))
 
 
 app.listen('3001', () => {

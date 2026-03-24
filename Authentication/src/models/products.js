@@ -25,6 +25,10 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    image:{
+        type:[String]
+
+    }
 }, { timestamps: true });
 const product = mongoose.model("Product", productSchema);
 

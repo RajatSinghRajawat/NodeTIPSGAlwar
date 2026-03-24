@@ -4,10 +4,13 @@ const product = require("../models/products")
 const addPrdoucts = async (req, res) => {
 
   try {
-    const { name, price, description, inStock ,courseId } = req.body
+    const { name, price, description, inStock, courseId } = req.body
+
+
+    const images = req.files.map(file => file.filename);
 
     const add = await product.create({
-      name, price, description, inStock ,courseId
+      name, price, description, inStock, courseId, image: images
     })
     res.status(200).json({ message: "product addded successfully", add })
   } catch (error) {
