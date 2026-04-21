@@ -11,14 +11,15 @@ const auth = mongoose.Schema({
         unique: true
 
     },
-    password:{
-        type:String,
-        required:true
-    }
+    password: {
+        type: String,
+        required: true
+    },
+    Otp: { type: Number },
 })
 
 
 
-const Auth  = mongoose.model("auth" , auth);
+const Auth = mongoose.model("auth", auth);
 
-module.exports = {Auth}
+module.exports = { Auth }

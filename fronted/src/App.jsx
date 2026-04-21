@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import Home from './components/Home'
 import Products from './components/Products'
 import Authentication from './components/Authentication'
+import EmailOtp from './components/EmailOtp'
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/auth" element={<Authentication />} />
+          <Route path="/email-otp" element={<EmailOtp />} />
         </Routes>
       </Container>
     </Router>

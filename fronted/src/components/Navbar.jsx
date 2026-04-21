@@ -16,8 +16,11 @@ const Navbar = () => {
             <Nav.Link as={NavLink} to="/products">
               Products
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/auth">
+            {/* <Nav.Link as={NavLink} to="/auth">
               Login / Signup
+            </Nav.Link> */}
+            <Nav.Link as={NavLink} to="/email-otp">
+              Email
             </Nav.Link>
           </Nav>
         </RBNavbar.Collapse>

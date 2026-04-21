@@ -1,9 +1,78 @@
 const { Auth } = require("../models/auth");
 const bcrypt = require('bcrypt');
 
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const sendEmail = require("../common/Emailsender");
 
 const saltround = 10;
+const generateOTP = () => {
+    return Math.floor(100000 + Math.random() * 900000); // 6 digit OTP
+};
+
+const sendOtp = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
+
+        const otp = generateOTP();
+
+        // Check user exists or not
+        let user = await Auth.findOne({ email });
+
+        if (!user) {
+            user = await Auth.create({ email, Otp: otp });
+        } else {
+            user.Otp = otp;
+            await user.save();
+        }
+
+        // Send Email
+        await sendEmail(
+            email,
+            "Your OTP Code",
+            `Your OTP is ${otp}`,
+            `<h2>Your OTP is: ${otp}</h2>`
+        );
+
+        res.status(200).json({ message: "OTP sent successfully" });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error sending OTP" });
+    }
+};
+
+
+
+const verifyOtp = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+
+        const user = await Auth.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (user.Otp != otp) {
+            return res.status(400).json({ message: "Invalid OTP" });
+        }
+
+        // OTP verified → clear OTP
+        user.Otp = null;
+        await user.save();
+
+        res.status(200).json({ message: "OTP verified successfully" });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "OTP verification failed" });
+    }
+};
+
 const register = async (req, res) => {
 
     try {
@@ -80,4 +149,4 @@ const getProfile = async (req, res) => {
         console.log(error);
     }
 }
-module.exports = { register, login, logout, getProfile }
+module.exports = { register, login, logout, getProfile, sendOtp, verifyOtp }
